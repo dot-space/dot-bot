@@ -7,7 +7,7 @@ import urllib
 from keep_alive import keep_alive
 
 help_info = [
-    "**COMMANDS**\n\n'$inspire' TO GET RANDOM QUOTE\n\n'$date' TO GET CURRENT DATE\n\n'$ github search' TO SEARCH ACCOUNT ON GITHUB"
+    "**COMMANDS**\n\n'$inspire' TO GET RANDOM QUOTE\n\n'$date' TO GET CURRENT DATE\n\n'$ github search' TO SEARCH ACCOUNT ON GITHUB\n\n'$god'"
 ]
 client = discord.Client()
 
@@ -59,6 +59,9 @@ async def on_message(message):
     
     if message.content.startswith("$info"):
         await message.channel.send(''.join(help_info))
+    
+    if message.content.startswith("$god"):
+        await message.channel.send('We are here to help!')
     
 @client.event
 async def on_member_join(member):
