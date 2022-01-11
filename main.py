@@ -57,7 +57,7 @@ async def on_message(message):
         github_result = github_search_user(user)
         await message.channel.send(github_result[0]+"\nFollowers:" + github_result[1]+"  Following:"+github_result[2]+"  Public_repo:"+github_result[3])
     
-    if message.content.startswith("$help"):
+    if message.content.startswith("$get commands"):
         await message.channel.send(''.join(help_info))
     
     if message.content.startswith("$god"):
