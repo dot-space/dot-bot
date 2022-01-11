@@ -4,10 +4,10 @@ import requests
 import json
 import datetime
 import urllib
-from keep_alive import keep_alive
+# from keep_alive import keep_alive
 
 help_info = [
-    "**COMMANDS**\n\n'$inspire' TO GET RANDOM QUOTE\n\n'$date' TO GET CURRENT DATE\n\n'$ github search' TO SEARCH ACCOUNT ON GITHUB\n\n'$god'"
+    "**COMMANDS**\n\n'$inspire' TO GET RANDOM QUOTE\n\n'$date' TO GET CURRENT DATE\n\n'$ github search' TO SEARCH ACCOUNT ON GITHUB\n\n'$joke' TO GET RANDOM JOKE"
 ]
 client = discord.Client()
 
@@ -28,6 +28,20 @@ def github_search_user(user_name):
 
         github_resource = [github_url,num_follower,num_following,repo]
         return github_resource
+
+def random_joke():
+    url = "https://some-random-api.ml/joke"
+    responce = urllib.request.urlopen(url)
+    data = json.loads(responce.read())
+    joke = data["joke"]
+    return joke
+
+def random_meme():
+    url = "https://some-random-api.ml/meme"
+    responce = urllib.request.urlopen(url)
+    data = json.loads(responce.read())
+    meme = data["image"]
+    return meme
 
 @client.event
 async def on_ready():
@@ -63,6 +77,14 @@ async def on_message(message):
     if message.content.startswith("$god"):
         await message.channel.send('We are here to help!')
     
+    if message.content.startswith("$joke"):
+        joke = random_joke()
+        await message.channel.send('>>> '+joke)
+    
+    if message.content.startswith("$meme"):
+        meme = random_meme()
+        await message.channel.send(meme)
+
 @client.event
 async def on_member_join(member):
     await member.create_dm()
@@ -70,5 +92,5 @@ async def on_member_join(member):
         f'Hi {member.name}, welcome to my Discord server!')
     
 token = os.environ.get("Token")
-keep_alive()
-client.run(token)
+# keep_alive()
+client.run("OTI5MTEwMTAyNjE3Nzc2MTkx.YdijNg.qolbBAPtTtnc3qMxgFFbyiflZlc")
