@@ -85,12 +85,5 @@ async def on_message(message):
         meme = random_meme()
         await message.channel.send(meme)
 
-@client.event
-async def on_member_join(member):
-    await member.create_dm()
-    await member.dm_channel.send(
-        f'Hi {member.name}, welcome to my Discord server!')
-    
-token = os.environ.get("Token")
 # keep_alive()
-client.run("OTI5MTEwMTAyNjE3Nzc2MTkx.YdijNg.qolbBAPtTtnc3qMxgFFbyiflZlc")
+client.run("")
