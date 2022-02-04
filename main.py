@@ -115,6 +115,14 @@ async def on_message(message):
     if message.content.startswith("meme"):
         meme = random_meme()
         await message.channel.send(meme)
+        
+ #condition to return linktree
+    if message.content.startswith('Linktree'):
+        await message.channel.send('Hello '+str(message.author)+' !'+'\n'+'You can look up my linktree @: '+'https://dot-space.github.io/dot-linktree/')
+        
+ #condition to return github
+    if message.content.startswith('Github'):
+        await message.channel.send('Hello '+str(message.author)+' !'+'\n'+'You can look up my github @: '+'https://github.com/dot-space')
 
 #command to send command info
 @client.command()
