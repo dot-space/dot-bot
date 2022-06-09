@@ -7,6 +7,7 @@ import urllib
 import discord
 import requests
 from discord.ext import tasks, commands
+from discord.ext.commands import has_permissions, MissingPermissions, has_any_role, MissingRequiredArgument, MissingRole
 from dotenv import load_dotenv
 
 intents = discord.Intents.default()
@@ -17,8 +18,7 @@ load_dotenv()
 client = commands.Bot(command_prefix="$", intents=intents)
 
 # variables
-games = ["GTA V", "VALORENT", "GOD OF WAR", "HALO INFINITE", "CALL OF DUTY VANGUARD", "Sniper Elite 5", "Dolmen",
-         "V RISING", "ELDEN RING", "DYING LIGHT 2", "GOD OF WAR", "FORZA HORIZON 5"]
+games = ["Lost in Space", "How is the Josh"]
 help_info = [
     "**COMMANDS**\n\n'inspire' TO GET RANDOM QUOTE\n\n'date' TO GET CURRENT DATE\n\n'$github' TO SEARCH ACCOUNT ON GITHUB\n\n'joke' TO GET RANDOM JOKE\n\n'$clear' TO CLEAR MESSAGE \n\n'$DoT_data' TO GET SERVER STATUS "
 ]
@@ -55,7 +55,7 @@ def random_joke():
     return joke
 
 
-# function to retun random joke
+# function to return random joke
 def random_meme():
     url = "https://some-random-api.ml/meme"
     response = urllib.request.urlopen(url)
@@ -94,6 +94,20 @@ async def on_member_remove(member):
     channel = client.get_channel(979107875408470016)
     embed = discord.Embed(title=f"Good bye {member.name}!!", description=f"I was such a pleasure to meet you :pray: ")
     await channel.send(embed=embed)
+
+
+# Error handler
+@client.event
+async def on_command_error(ctx, error):
+    # Trigger when Argument is missing in any command
+    if isinstance(error, MissingRequiredArgument):
+        await ctx.send("Please pass all required arguments")
+    # Trigger when Permission is missing
+    elif isinstance(error, MissingPermissions):
+        await ctx.send("You don't have Required Permission...")
+    # Trigger when Role is missing
+    elif isinstance(error, MissingRole):
+        await ctx.send("Please Contact Admin to give Access to perform this task")
 
 
 @client.listen()
@@ -156,6 +170,8 @@ async def clear(ctx, amount):
 
 # command to kick member
 @client.command()
+@has_permissions(kick_members=True)
+@has_any_role('Lead', 'Mod', 'Head')
 async def kick(ctx, member: discord.Member, *, reason=None):
     await member.kick(reason=reason)
     await ctx.send(f"Kicked {member.mention} \n\nReason: {reason}")
@@ -163,6 +179,8 @@ async def kick(ctx, member: discord.Member, *, reason=None):
 
 # command to ban member
 @client.command()
+@has_permissions(ban_members=True)
+@has_any_role('Lead', 'Mod', 'Head')
 async def ban(ctx, member: discord.Member, *, reason=None):
     await member.ban(reason=reason)
     await ctx.send(f"Banned {member.mention}")
@@ -206,12 +224,32 @@ async def DoT_data(ctx):
         else:
             idle += 1
     embed = discord.Embed(title=ctx.guild.name + " Stats", color=0x000)
-    embed.add_field(name="Member Count", value=ctx.guild.member_count,inline=False)
+    embed.add_field(name="Member Count", value=ctx.guild.member_count, inline=False)
     embed.add_field(name="Online", value=f"{online} :green_circle:", inline=True)
     embed.add_field(name="Offline", value=f"{offline} :red_circle:", inline=True)
     embed.add_field(name="Idle", value=f"{idle} :yellow_circle:", inline=True)
     await ctx.send(embed=embed)
+    await ctx.message.delete()
 
+
+# @client.command()
+# @has_permissions(manage_channels=True)
+# async def lock(ctx, channel: discord.TextChannel = None):
+#     overwrite = ctx.channel.overwrites_for(ctx.guild.default_role)
+#     overwrite.send_messages = False
+#     await ctx.channel.set_permissions(ctx.guild.default_role, overwrite=overwrite)
+#     await ctx.send('Channel locked.')
+
+
+# @client.command()
+# @has_permissions(manage_channels=True)
+# async def unlock(ctx, channel: discord.TextChannel = None):
+#     overwrite = ctx.channel.overwrites_for(ctx.guild.default_role)
+#     overwrite.send_messages = True
+#     await ctx.channel.set_permissions(ctx.guild.default_role, overwrite=overwrite)
+#     await ctx.send('Channel unlocked.')
+
+###################################################################
 
 # keep_alive()
 bot = os.getenv("Token")
