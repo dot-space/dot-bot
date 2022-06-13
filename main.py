@@ -186,12 +186,11 @@ async def ban(ctx, member: discord.Member, *, reason=None):
     await ctx.send(f"Banned {member.mention}")
 
 
-# command DM invite link to member
+# command to send invite link
 @client.command(pass_context=True)
-async def invite(ctx, user: discord.Member):
+async def invite(ctx):
     link = await ctx.channel.create_invite(max_use=2)
-    await ctx.send("invite sent")
-    await user.send(link)
+    await ctx.send(link)
 
 
 # command to unban member
