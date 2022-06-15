@@ -209,6 +209,16 @@ async def unban(ctx, *, member):
         return
 
 
+# command that returns current leadership
+@client.command()
+async def members(ctx, role: discord.Role):
+    member_list = role.members
+    final_list = list()
+    for member in member_list:
+        final_list.append("{0.name}#{0.discriminator}".format(member))
+    await ctx.send("\n".join(final_list))
+    
+
 @client.command()
 async def DoT_data(ctx):
     offline = 0
